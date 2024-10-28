@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User  # Change 'models' to '.models'
+from .models import User
 from .permissions import IsCustomer, IsSpecialist
 from .serializers import UserRegistrationSerializer, ProfileSerializer
 
