@@ -13,6 +13,14 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
+    @property
+    def is_specialist(self):
+        return self.role == 'specialist'
+
+    @property
+    def is_customer(self):
+        return self.role == 'customer'
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -25,15 +33,11 @@ class Profile(models.Model):
     bio = models.TextField(blank=True, null=True)
 
     def clean(self):
-        if self.user.role == 'specialist' and not self.profile_picture:
-            raise ValidationError("Profile picture is required for specialists.")
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        if self.user.role == 'specialist' and self.profile_picture:
+        if self.user.is_specialist and not self.profile_picture:
+            raise ValidationError('Specialists must have a profile picture.')
+        if self.profile_picture:
             img = Image.open(self.profile_picture)
             if img.width != img.height:
-                raise ValidationError("Profile picture must be a 1:1 aspect ratio.")
+                raise ValidationError("Profile picture must have a 1:1 aspect ratio.")
             if self.profile_picture.size > 400 * 1024:
                 raise ValidationError("Profile picture must be under 400 KB.")
-        super().save(*args, **kwargs)
