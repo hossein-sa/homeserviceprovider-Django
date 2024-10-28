@@ -22,6 +22,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+
+        # Set status based on role
+        if validated_data['role'] == 'specialist':
+            validated_data['status'] = 'pending_approval'
+        else:
+            validated_data['status'] = 'approved'
+
         # Extract profile data
         profile_picture = validated_data.pop('profile_picture', None)
         bio = validated_data.pop('bio', "")
@@ -31,7 +38,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
-            role=validated_data['role']
+            role=validated_data['role'],
+            status=validated_data['status'],
         )
 
         # Create the Profile and assign bio and profile_picture

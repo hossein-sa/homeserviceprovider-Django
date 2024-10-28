@@ -11,7 +11,15 @@ class User(AbstractUser):
         ('specialist', 'Specialist'),
         ('admin', 'Admin'),
     )
+
+    STATUS_CHOICES = (
+        ('pending_approval', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('inactive', 'Inactive'),
+    )
+
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='inactive')
 
     @property
     def is_specialist(self):
