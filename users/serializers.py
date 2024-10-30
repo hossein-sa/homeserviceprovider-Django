@@ -83,7 +83,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         # Assign services if the user is a specialist
         if user.role == 'specialist':
             specialist_service = SpecialistService.objects.create(specialist=user, main_service=main_service)
-            specialist_service.sub_services.set(sub_services)
+            specialist_service.sub_service.set(sub_services)
             specialist_service.save()
 
         return user

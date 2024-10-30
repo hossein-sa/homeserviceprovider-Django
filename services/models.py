@@ -15,6 +15,7 @@ class SubService(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     base_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    expiration_hours = models.PositiveIntegerField(default=24)
 
     def __str__(self):
         return f"{self.name} ({self.main_service.name})"
@@ -25,7 +26,7 @@ class SpecialistService(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='specialist_service'
     )
     main_service = models.ForeignKey(MainService, on_delete=models.CASCADE)
-    sub_service = models.ManyToManyField(SubService)
+    sub_service = models.ManyToManyField(SubService, related_name='specialist_services')
 
     def __str__(self):
         return f"{self.specialist.username} - {self.main_service.name}"

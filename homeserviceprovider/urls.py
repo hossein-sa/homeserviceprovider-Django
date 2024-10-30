@@ -21,9 +21,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('api/users/', include('users.urls')),  # This should point to users' URLs
+    path('api/orders/', include('orders.urls')),
     path('admin/', admin.site.urls),
 ]
-
 
 # Add this line to serve media files during development
 if settings.DEBUG:

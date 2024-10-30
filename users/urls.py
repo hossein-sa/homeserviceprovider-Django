@@ -8,5 +8,5 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('specialists/', SpecialistOnlyView.as_view(), name='specialist-only'),
     path('customers/', CustomerOnlyView.as_view(), name='customers-only'),
-    path('api-token-auth', obtain_auth_token, name='api-token-auth'),
+    path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
 ]
