@@ -1,7 +1,12 @@
+from decimal import Decimal
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
-
-from .models import User
+from rest_framework.reverse import reverse
+from django.contrib import messages
+from .models import User, Wallet
 from .permissions import IsCustomer, IsSpecialist
 from .serializers import UserRegistrationSerializer, ProfileSerializer
 
@@ -49,3 +54,30 @@ class CustomerOnlyView(generics.ListAPIView):
     def get_queryset(self):
         # Filters profiles to return only those for customer users
         return User.objects.filter(role='customer')
+
+@login_required
+def recharge_wallet(request):
+    if request.method == "POST":
+        try:
+            amount = Decimal(request.POST.get('amount'))
+            if amount <= 0:
+                messages.error(request, "Please enter a valid amount.")
+                return redirect(reverse("recharge_wallet"))
+
+            # Update the customer's wallet balance
+            wallet, created = Wallet.objects.get_or_create(user=request.user)
+            wallet.balance += amount
+            wallet.save()
+
+            messages.success(request, f"Successfully added ${amount} to your wallet!")
+            return redirect(reverse("wallet"))
+        except (ValueError, Decimal.InvalidOperation):
+            messages.error(request, "Invalid amount. Please enter a valid number.")
+
+    return render(request, "users/recharge_wallet.html")
+
+
+@login_required
+def wallet(request):
+    wallet, created = Wallet.objects.get_or_create(user=request.user)
+    return render(request, "users/wallet.html", {"balance": wallet.balance})

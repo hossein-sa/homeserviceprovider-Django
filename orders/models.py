@@ -29,7 +29,7 @@ class Order(models.Model):
     scheduled_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     address = models.TextField(blank=True, null=True)
-    visible_until = models.DateTimeField()
+    visible_until = models.DateTimeField(default=timezone.now() + timedelta(hours=24))
 
     def save(self, *args, **kwargs):
         # Set visible_until based on sub-service's expiration_hours

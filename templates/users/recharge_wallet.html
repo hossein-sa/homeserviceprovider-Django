@@ -1,0 +1,55 @@
+<!-- templates/users/recharge_wallet.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .recharge-container {
+            margin-top: 50px;
+            max-width: 500px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .recharge-container h4 {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="recharge-container mx-auto">
+        <h4 class="text-center mb-4">Secure Wallet Recharge</h4>
+        <form method="post" action="{% url 'recharge_wallet' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter Amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="cardNumber" class="form-label">Card Number</label>
+                <input type="text" class="form-control" id="cardNumber" name="card_number" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="expiryDate" class="form-label">Expiry Date</label>
+                    <input type="text" class="form-control" id="expiryDate" name="expiry_date" placeholder="MM/YY" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="cvv" class="form-label">CVV</label>
+                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Recharge Wallet</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
